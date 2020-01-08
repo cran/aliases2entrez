@@ -1,9 +1,9 @@
-7e05d635610bc3d5fd99afc2dfc44df5 *DESCRIPTION
+a7cb1cbc8839488ee1a3e516322742c3 *DESCRIPTION
 07d5e018d4a492fd8dc57c565e6c3a13 *LICENSE
 01abf8cd1bae4731bb1780f997cc4580 *NAMESPACE
-1dfe2290d5043dd3db6ba5356141d3a3 *NEWS
-12d8791f48e8bd146a3ef131fec4ed80 *R/convert_symbols.R
-24c2eeb00772a713b6f7cb9810b0e06a *R/update_symbols.R
+6e00cef2992b15d3de3c2a853efd9b89 *NEWS
+1828d5316d8c850c2a39ab2fdd0837e5 *R/convert_symbols.R
+5d7a87605a3d7702bfcbce139a11437b *R/update_symbols.R
 566023196bbd9752a91ce69aef85faad *inst/WORDLIST
 0a72fa2c82b2424a7d5bea729946c9c0 *inst/extdata/HGNC.txt
 7bf9fae0048917a16e27357be7b92c99 *man/convert_symbols.Rd
