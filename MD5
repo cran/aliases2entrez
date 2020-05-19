@@ -1,11 +1,11 @@
-a7cb1cbc8839488ee1a3e516322742c3 *DESCRIPTION
+050d5fe100ac40e7dfd92dbacc328845 *DESCRIPTION
 07d5e018d4a492fd8dc57c565e6c3a13 *LICENSE
 01abf8cd1bae4731bb1780f997cc4580 *NAMESPACE
 6e00cef2992b15d3de3c2a853efd9b89 *NEWS
-1828d5316d8c850c2a39ab2fdd0837e5 *R/convert_symbols.R
-5d7a87605a3d7702bfcbce139a11437b *R/update_symbols.R
+e465b4d7136c545e5a6747c68bbd07af *R/convert_symbols.R
+42c0b1ae017c10a597107b6639832f31 *R/update_symbols.R
 566023196bbd9752a91ce69aef85faad *inst/WORDLIST
-0a72fa2c82b2424a7d5bea729946c9c0 *inst/extdata/HGNC.txt
+bfd58c25a6e067f5338275bcd18cdd37 *inst/extdata/HGNC.txt
 7bf9fae0048917a16e27357be7b92c99 *man/convert_symbols.Rd
 46f35f79720047e8e9f6331b8e95e59b *man/update_symbols.Rd
 0622a97a2aaa3c342f09636052c2d7f5 *tests/spelling.R

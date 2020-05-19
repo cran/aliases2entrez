@@ -37,8 +37,10 @@
 
 convert_symbols <- function(symbols, HGNC, c = 1) {
   genes <- symbols
-  expected <- c("Approved.symbol", "Previous.symbols", "Synonyms", "NCBI.Gene.ID")
-  if (dim(HGNC)[2] != 4) {
+  # expected <- c("Approved.symbol", "Previous.symbols", "Synonyms", "NCBI.Gene.ID")
+  expected <- c("Approved.symbol", "Previous.symbols", "Alias.symbols", "NCBI.Gene.ID","Ensembl.gene.ID")
+
+  if (dim(HGNC)[2] != 5) {
     stop("HGNC correspondence table was not load properly, please consider updating with HGNC=update_symbols()")
   } else if (!identical(colnames(HGNC), expected)) {
     stop("HGNC correspondence table was not load properly, please consider updating with HGNC=update_symbols()")
@@ -214,7 +216,7 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
   }
 
   # match to third column: Synonyms (1 elements in column)
-  matched[j] <- HGNC$NCBI.Gene.ID[match(tolower(genes[j]), tolower(HGNC$Synonyms))]
+  matched[j] <- HGNC$NCBI.Gene.ID[match(tolower(genes[j]), tolower(HGNC$Alias.symbols))]
   # elements not found:
   j2 <- which(is.na(matched))
   if (length(j2) == 0) {
@@ -222,13 +224,13 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
     aliases <- data.frame(Symbols = genes, entrezID = as.numeric(matched))
     return(aliases)
   }
-  message(paste("-> matching ", length(j), " symbols to HGNC synonyms", sep = ""))
+  message(paste("-> matching ", length(j), " symbols to HGNC aliases symbols", sep = ""))
 
   if (length(j)!=length(j2))
   {message(paste(length(j2), " symbols remaining", sep = ""))
   }
 
-  message(paste("-> matching ", length(j2), " symbols to HGNC synonyms (adapt. parsing)", sep = ""))
+  message(paste("-> matching ", length(j2), " symbols to HGNC aliases symbols (adapt. parsing)", sep = ""))
   # match to third column: Synonyms (2+ elements in column)
   cl <- makeCluster(c)
   registerDoParallel(cl)
@@ -239,21 +241,21 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
     # for each element not found get corresponding gene
     gene_to_find <- tolower(genes[j2[g]])
     # check if element not found is present in symbols of columns 2 of HGNC
-    for (line in seq_along(HGNC$Synonyms)) {
+    for (line in seq_along(HGNC$Alias.symbols)) {
       # split multiple elements
-      res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Synonyms[line]), split = ", ")[[1]])
+      res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Alias.symbols[line]), split = ", ")[[1]])
       # if found stop
       if (res) {
         break
       }
     }
     # get corresponding line or NA and store in l
-    if (line == length(HGNC$Synonyms)) {
+    if (line == length(HGNC$Alias.symbols)) {
       if (length(grep("-", gene_to_find, perl = TRUE)) > 0 & length(grep("-[0-9].*$", gene_to_find, perl = TRUE)) > 0) {
         gene_to_find <- gsub("-", "", gene_to_find)
-        for (line in seq_along(HGNC$Synonyms)) {
+        for (line in seq_along(HGNC$Alias.symbols)) {
           # split multiple elements
-          res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Synonyms[line]), split = ", ")[[1]])
+          res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Alias.symbols[line]), split = ", ")[[1]])
           # if found stop
           if (res) {
             break
@@ -261,9 +263,9 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
         }
       } else if (length(grep("-", gene_to_find, perl = TRUE)) > 0 & length(grep("(-1)$", gene_to_find, perl = TRUE)) > 0) {
         gene_to_find <- strsplit(gene_to_find, "-")[[1]][1]
-        for (line in seq_along(HGNC$Synonyms)) {
+        for (line in seq_along(HGNC$Alias.symbols)) {
           # split multiple elements
-          res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Synonyms[line]), split = ", ")[[1]])
+          res <- gene_to_find %in% tolower(strsplit(as.character(HGNC$Alias.symbols[line]), split = ", ")[[1]])
           # if found stop
           if (res) {
             break
@@ -271,7 +273,7 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
         }
       }
     }
-    if (line != length(HGNC$Synonyms)) {
+    if (line != length(HGNC$Alias.symbols)) {
       line
     } else {
       NA
@@ -302,7 +304,7 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
   if (sum(!(names(other_ids) == symbols)) != 0) {
     warning("org.Hs.eg.db correspondence error")
   }
-
+  #######check if single gene or no gene found
   message(paste("-> matching ", length(k), " symbols to org.Hs.eg.db", sep = ""))
 
   matched[k] <- as.numeric(other_ids)
