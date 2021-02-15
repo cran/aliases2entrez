@@ -1,11 +1,15 @@
 Package: aliases2entrez
 Title: Converts Human gene symbols to entrez IDs
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person(given = "Raphael",
            family = "Bonnet",
            role = c("aut", "cre"),
            email = "raphael.bonnet@univ-cotedazur.fr",
+           comment="Université Côte d’Azur"),
+      person(given = "Lee",
+           family = "Mariault",
+           role = c("ctb"),
            comment="Université Côte d’Azur"),
       person(given = "Jean-François",
            family = "Peyron",
@@ -22,13 +26,14 @@ Imports: doParallel, limma, utils, org.Hs.eg.db, AnnotationDbi,
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests: spelling
 Language: en-US
 NeedsCompilation: no
-Packaged: 2020-05-19 08:47:28 UTC; root
+Packaged: 2021-02-15 09:48:25 UTC; raphael
 Author: Raphael Bonnet [aut, cre] (Université Côte d’Azur),
+  Lee Mariault [ctb] (Université Côte d’Azur),
   Jean-François Peyron [aut] (Inserm)
 Maintainer: Raphael Bonnet <raphael.bonnet@univ-cotedazur.fr>
 Repository: CRAN
-Date/Publication: 2020-05-19 13:30:02 UTC
+Date/Publication: 2021-02-15 10:30:06 UTC

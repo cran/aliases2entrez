@@ -27,7 +27,7 @@
 #' # import the correspondence file
 #' file <- system.file("extdata", "HGNC.txt", package = "aliases2entrez")
 #' HGNC <- read.delim(file)
-#' # alterntatively update a new one with update_symbols()
+#' # alternatively update a new one with update_symbols()
 #' symbols <- c("BRCA1", "TP53")
 #' # run the main function
 #' ids <- convert_symbols(symbols, HGNC)
@@ -45,6 +45,7 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
   } else if (!identical(colnames(HGNC), expected)) {
     stop("HGNC correspondence table was not load properly, please consider updating with HGNC=update_symbols()")
   }
+  genes<-gsub("[,;!?]","",genes)
 
   message("calling limma::alias2Symbol on provided data")
   genes <- ifelse(is.na(alias2SymbolTable(genes)), genes, alias2SymbolTable(genes))
@@ -300,7 +301,22 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
 
   symbols <- genes[which(is.na(matched))]
 
-  other_ids <- suppressMessages(mapIds(org.Hs.eg.db, symbols, "ENTREZID", "SYMBOL"))
+  other_ids <- tryCatch(
+    {suppressMessages(mapIds(org.Hs.eg.db, symbols,"ENTREZID", "SYMBOL"))
+    },
+    error=function(cond){
+      if (length(symbols)==1){
+        NA
+      }
+    }
+  )
+  if (length(other_ids)==0){
+    other_ids=rep(NA,length(symbols))
+  }
+  if (length(other_ids)==0){
+    other_ids=rep(NA,length(symbols))
+  }
+
   if (sum(!(names(other_ids) == symbols)) != 0) {
     warning("org.Hs.eg.db correspondence error")
   }
@@ -339,8 +355,8 @@ convert_symbols <- function(symbols, HGNC, c = 1) {
 
   message(paste(length(m), " symbols not found", sep = ""))
 
-  message(paste(round( (length(genes)-length(m)) / length(genes), 5), "% of genes were found:", sep = ""))
-  message('Genes not found:\n', as.character(genes[m]))
+  message(paste(round(length(m) / length(genes), 5)*100, "% of genes were not found:", sep = ""))
+  message('Genes not found:\n', paste(as.character(genes[m]),collapse=','))
 
   aliases <- data.frame(Symbols = genes, entrezID = as.numeric(matched))
 
